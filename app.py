@@ -32,7 +32,7 @@ def get_purchase_orders_by_id(id):
     return ("Id não encontrado")
 
 @app.route('/purchase_orders', methods = ['POST'])
-def create_get_purchase_order():
+def create_purchase_order():
     request_data = request.get_json()
     purchase_order = {
         'id': request_data['id'],
@@ -52,7 +52,20 @@ def get_purchase_orders_items(id):
         
     return ("Id não encontrado")
     
-      
+@app.route('/purchase_orders/<int:id>/items', methods = ['POST'])      
+def create_purchase_orders_items(id):
+    request_data = request.get_json()
+    for po in purchase_orders:
+        if po['id'] == id:
+            po['items'].append({
+                'id': request_data['id'],
+                'description': request_data['description'],
+                'price': request_data['price']
+            })
+
+            return jsonify(po)       
+         
+    return ("Id não encontrado")
 
 app.run(port=5000)
 
