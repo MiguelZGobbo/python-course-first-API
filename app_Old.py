@@ -32,7 +32,7 @@ def get_purchase_orders_by_id(id):
     return ("Id não encontrado")
 
 @app.route('/purchase_orders', methods = ['POST'])
-def create_purchase_order():
+def creates_purchase_order():
     request_data = request.get_json()
     purchase_order = {
         'id': request_data['id'],
