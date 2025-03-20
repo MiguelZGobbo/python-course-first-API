@@ -21,14 +21,14 @@ class PurchaseOrders(Resource):
         'id',
         type = int,
         required = True,
-        help = 'Informe o ID do pedido'
+        help = 'Informe um ID válido'
     )
 
     parser.add_argument(
         'description',
         type = str,
         required = True,
-        help = 'Informe a descrição do produto'
+        help = 'Informe uma descrição válida'
     )
 
     def get(self):
