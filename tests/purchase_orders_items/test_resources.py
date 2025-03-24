@@ -63,3 +63,16 @@ def test_post_invalid_price(test_client):
 
     assert response.status_code == 400
     assert response.json['message']['price'] == 'Informe um preço válido!'
+
+def test_post_purchase_order_not_found(test_client):
+    id = 999
+
+    obj = {'id': 2, 'description': '', 'price': 10.40 }
+
+    response = test_client.post(
+        '/purchase_orders/{}/items'.format(id),
+        data = json.dumps(obj),
+        content_type = 'application/json'
+    )
+
+    assert response.json['message'] == 'Pedido de id:{} não encontrado'.format(id)
