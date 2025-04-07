@@ -19,4 +19,5 @@ def seed_db():
 def clear_db():
     db.session.query(PurchaseOrdersItemsModel).delete()
     db.session.query(PurchaseOrderModel).delete()
+    db.session.commit()
     
