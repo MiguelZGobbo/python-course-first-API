@@ -20,7 +20,21 @@ def create_app():
 
     db.init_app(app)
 
-    JWTManager(app) 
+    jwt = JWTManager(app) 
+
+    @jwt.invalid_token_loader
+    def invalid_jwt(error):
+        return({
+            "message": "Token de acesso inválido"},
+            401
+            )
+    
+    @jwt.unauthorized_loader
+    def unauthorized_jwt(error):
+        return(
+            {"message": "Sem autorização, por favor informe um token válido"},
+            401
+        )
 
     with app.app_context():
         db.create_all()
