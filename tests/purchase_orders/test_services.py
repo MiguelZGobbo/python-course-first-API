@@ -1,6 +1,6 @@
 import pytest
 from purchase_orders.services import PurchaseOrdersServices
-from purchase_orders.exceptions import QuantityException
+from exceptions.exceptions import QuantityException
 
 @pytest.mark.nocleardb
 def test_check_quantity_less_then_miminum():
