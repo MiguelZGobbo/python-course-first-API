@@ -1,3 +1,5 @@
+"""Configurações e fixtures para os testes de purchase_orders_items."""
+
 import pytest
 from db import db 
 from purchase_orders.model import PurchaseOrderModel
@@ -5,6 +7,13 @@ from purchase_orders_items.model import PurchaseOrdersItemsModel
 
 @pytest.fixture()
 def seed_db():
+    """
+    Insere um pedido de compra e um item associado no banco para uso nos testes.
+
+    Essa fixture cria registros consistentes que podem ser reutilizados em diferentes
+    testes, garantindo a existência de um pedido de compra com um item associado
+    para validação dos cenários de teste.
+    """
     po = PurchaseOrderModel('Pedido de Testes', 50)
     db.session.add(po)
     db.session.commit()
@@ -17,6 +26,13 @@ def seed_db():
 
 @pytest.fixture(scope = "function", autouse = True)
 def clear_db():
+    """
+    Limpa as tabelas de itens e pedidos antes de cada teste.
+
+    Executa automaticamente antes de cada teste, garantindo isolamento e prevenindo
+    que dados de um teste interfiram em outro. A limpeza é realizada deletando todos
+    os registros das tabelas PurchaseOrdersItemsModel e PurchaseOrderModel.
+    """
     db.session.query(PurchaseOrdersItemsModel).delete()
     db.session.query(PurchaseOrderModel).delete()
     db.session.commit()
