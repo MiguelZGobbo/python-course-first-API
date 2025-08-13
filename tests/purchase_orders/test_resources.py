@@ -1,6 +1,9 @@
+"""Testes de integração para os endpoints de purchase_orders."""
+
 import json
 
 def test_get_purchase_orders(test_client, get_headers, seed_db):
+    """Deve retornar todos os pedidos cadastrados."""
     response = test_client.get('/purchase_orders', headers=get_headers)
 
     assert response.status_code == 200
@@ -9,6 +12,11 @@ def test_get_purchase_orders(test_client, get_headers, seed_db):
     assert response.json[0]['quantity']  == seed_db.quantity
 
 def test_post_purchase_orders(test_client, get_headers):
+    """
+    Deve criar um novo pedido com dados válidos.
+
+    Testa se o retorno contém ID gerado e dados iguais aos enviados.
+    """
     obj = {'description': '', 'quantity': 150}
     response = test_client.post(
         '/purchase_orders',
@@ -23,6 +31,7 @@ def test_post_purchase_orders(test_client, get_headers):
     assert response.json['quantity'] == obj['quantity']
 
 def test_post_purchase_orders_with_invalid_quantity(test_client, get_headers):
+    """Deve retornar erro ao tentar criar um pedido com quantidade inválida."""
     obj = {'description': '', 'quantity': 200}
     response = test_client.post(
         '/purchase_orders',
@@ -35,6 +44,7 @@ def test_post_purchase_orders_with_invalid_quantity(test_client, get_headers):
     assert response.json['message'] == 'A quantidade deve ser entre 50 e 150 itens'
 
 def test_post_empty_description(test_client, get_headers):
+    """Deve retornar erro ao criar pedido sem descrição."""
     response = test_client.post(
         'purchase_orders',
         data =json.dumps({}),
@@ -46,6 +56,7 @@ def test_post_empty_description(test_client, get_headers):
     assert response.json['message']['description'] == 'Informe uma descrição válida'
 
 def test_get_purchase_order_by_id(test_client, get_headers, seed_db):
+    """Deve retornar um pedido existente pelo ID."""
     response = test_client.get('/purchase_orders/{}'.format(seed_db.id), headers=get_headers)
 
     assert response.status_code == 200
@@ -54,6 +65,7 @@ def test_get_purchase_order_by_id(test_client, get_headers, seed_db):
     assert response.json['quantity'] == seed_db.quantity
 
 def test_get_purchase_order_not_found(test_client, get_headers):
+    """Deve retornar mensagem de não encontrado ao buscar pedido inexistente."""
     id = 999
     response = test_client.get('/purchase_orders/{}'.format(id), headers=get_headers)
 
